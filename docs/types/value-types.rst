@@ -123,19 +123,24 @@ to the type of the left operand is always performed at the end, but not mentione
 
 
 .. note::
-  Division by zero causes a :ref:`Panic error<assert-and-require>`. This check can **not** be disabled through ``unchecked { ... }``.
+  تقسیم بر صفر باعث :ref:`Panic error<assert-and-require>`  می‌شود. این بررسی از طریق  ``{ ... }unchecked``  غیرفعال  **نمی‌شود** .
+
 
 .. note::
-  The expression ``type(int).min / (-1)`` is the only case where division causes an overflow.
-  In checked arithmetic mode, this will cause a failing assertion, while in wrapping
-  mode, the value will be ``type(int).min``.
 
-Modulo
+  عبارت  ``type(int).min / (-1)``  موردی است که تقسیم باعث سرریز  می‌شود. در حالت 
+  حسابی بررسی شده ، باعث اعلان شکست می‌شود، در حالی که در حالت wrapping  ، 
+  مقدار  ``type(int).min`` خواهد بود.
+  
+  
+
+باقیمانده  (Modulo)
 ^^^^^^
 
-The modulo operation ``a % n`` yields the remainder ``r`` after the division of the operand ``a``
-by the operand ``n``, where ``q = int(a / n)`` and ``r = a - (n * q)``. This means that modulo
-results in the same sign as its left operand (or zero) and ``a % n == -(-a % n)`` holds for negative ``a``:
+عملیات باقیمانده ``a % n``  پس از تقسیم عملوند   ``a`` توسط عملوند  ``n`` ، باقی مانده  ``r`` را حاصل می‌شود، 
+جایی که  ``q = int(a / n)`` و  ``r = a - (n * q)`` . این بدان معناست که باقیمانده همان 
+علامت عملوند سمت چپ (یا صفر) خود را نشان می‌دهد و ``a % n == -(-a % n)``  برای منفی  ``a`` 
+نگه می‌دارد:
 
 * ``int256(5) % int256(2) == int256(1)``
 * ``int256(5) % int256(-2) == int256(1)``
@@ -143,61 +148,71 @@ results in the same sign as its left operand (or zero) and ``a % n == -(-a % n)`
 * ``int256(-5) % int256(-2) == int256(-1)``
 
 .. note::
-  Modulo with zero causes a :ref:`Panic error<assert-and-require>`. This check can **not** be disabled through ``unchecked { ... }``.
 
-Exponentiation
+    باقیمانده با صفر باعث :ref:`Panic error<assert-and-require>`  می‌شود. این بررسی از طریق ``{ ... }unchecked`` غیرفعال **نمی‌شود**.
+
+
+به توان رساندن (Exponentiation)
 ^^^^^^^^^^^^^^
 
-Exponentiation is only available for unsigned types in the exponent. The resulting type
-of an exponentiation is always equal to the type of the base. Please take care that it is
-large enough to hold the result and prepare for potential assertion failures or wrapping behaviour.
+به توان رساندن فقط برای انواع بدون علامت  در توان  در دسترس است. نوع توان در نتیجه همیشه با نوع پایه 
+برابر است. لطفاً توجه داشته باشید که به اندازه کافی بزرگ باشد تا بتواند نتیجه را حفظ کند و برای اعلان شکست 
+احتمالی یا رفتار پیچیده آماده شود.
+
 
 .. note::
-  In checked mode, exponentiation only uses the comparatively cheap ``exp`` opcode for small bases.
-  For the cases of ``x**3``, the expression ``x*x*x`` might be cheaper.
-  In any case, gas cost tests and the use of the optimizer are advisable.
+
+    در حالت بررسی شده ، توان فقط از آپکد  ``exp`` نسبتاً ارزان برای پایه‌های کوچک استفاده می‎کند. برای 
+    موارد   ``x**3`` ، ممکن است عبارت  ``x*x*x`` ارزان تر باشد. در هر صورت، تست هزینه گاز و استفاده از 
+    بهینه ساز توصیه می‌شود.
+
 
 .. note::
-  Note that ``0**0`` is defined by the EVM as ``1``.
+    توجه داشته باشید که ``0**0``  توسط EVM به صورت  ``1`` تعریف می‌شود.
+  
 
 .. index:: ! ufixed, ! fixed, ! fixed point number
 
-Fixed Point Numbers
+عدد ممیز ثابت 
 -------------------
 
 .. warning::
-    Fixed point numbers are not fully supported by Solidity yet. They can be declared, but
-    cannot be assigned to or from.
 
-``fixed`` / ``ufixed``: Signed and unsigned fixed point number of various sizes. Keywords ``ufixedMxN`` and ``fixedMxN``, where ``M`` represents the number of bits taken by
-the type and ``N`` represents how many decimal points are available. ``M`` must be divisible by 8 and goes from 8 to 256 bits. ``N`` must be between 0 and 80, inclusive.
-``ufixed`` and ``fixed`` are aliases for ``ufixed128x18`` and ``fixed128x18``, respectively.
+    عدد ممیز ثابت هنوز توسط سالیدیتی کاملاً پشتیبانی نمی‌شوند. می‌توان آن‌ها را مشخص کرد، اما نمی‌توان 
+    آنها را به چیزی یا از چیزی اختصاص داد.
+    
 
-Operators:
+``fixed`` / ``ufixed`` : اعداد  ثابت بدون علامت و باعلامت دراندازه‌های مختلف. کلمات  کلیدی  ``ufixedMxN`` و  ``fixedMxN`` ، جایی که  ``M`` تعداد بیت‌های گرفته شده توسط نوع را نشان  می‌دهد و ``N``  نشان دهنده تعداد اعشار در دسترس است. ``M``  باید بر 8 قابل تقسیم باشد و از 8 به 256 بیت  تبدیل شود. ``N`` باید شامل 0 تا 80 باشد. ``ufixed`` و ``fixed`` به ترتیب نام‌های مستعار برای  ``ufixed128x18`` و  ``fixed128x18`` هستند.
 
-* Comparisons: ``<=``, ``<``, ``==``, ``!=``, ``>=``, ``>`` (evaluate to ``bool``)
-* Arithmetic operators: ``+``, ``-``, unary ``-``, ``*``, ``/``, ``%`` (modulo)
+
+
+عملگرها:
+
+*	مقایسه ها ``<=`` ، ``<`` ، ``==`` ، ``!=`` ، ``>=`` ، ``>`` (ارزیابی به  bool)
+*	عملگرهای حسابی: ``+`` ، ``-`` ، ``-`` unary  ، ``*`` ، ``/`` ، ``%`` (باقیمانده)
+
+
 
 .. note::
-    The main difference between floating point (``float`` and ``double`` in many languages, more precisely IEEE 754 numbers) and fixed point numbers is
-    that the number of bits used for the integer and the fractional part (the part after the decimal dot) is flexible in the former, while it is strictly
-    defined in the latter. Generally, in floating point almost the entire space is used to represent the number, while only a small number of bits define
-    where the decimal point is.
+
+    تفاوت اصلی بین اعداد float ( ``float`` و ``double`` در بسیاری از زبانها، به طور دقیق‌تر اعداد IEEE 754) و عدد ممیز ثابت در این است که تعداد بیت‌های مورد استفاده برای عدد صحیح  و قسمت کسری  (قسمت بعد از نقطه اعشاری ) در قبل انعطاف پذیر است، در حالی که در  دومی به طور دقیقاً تعریف شده‌است. به طور کلی، در اعداد float تقریباً از کل فضا برای نشان دادن عدد  استفاده می‌شود، در حالی که فقط تعداد کمی بیت مکان نقطه اعشار را تعریف می‌کنند.
+
+    
 
 .. index:: address, balance, send, call, delegatecall, staticcall, transfer
 
 .. _address:
 
-Address
+آدرس
 -------
 
-The address type comes in two flavours, which are largely identical:
+نوع آدرس به دو صورت وجود دارد که تا حد زیادی یکسان هستند:
 
-- ``address``: Holds a 20 byte value (size of an Ethereum address).
-- ``address payable``: Same as ``address``, but with the additional members ``transfer`` and ``send``.
+-	``address``: دارای مقدار 20 بایت (اندازه آدرس اتریوم) است.
+-	``address payable``: همان  ``address`` است، اما با اعضای اضافی  ``transfer`` و   ``send`` .
 
-The idea behind this distinction is that ``address payable`` is an address you can send Ether to,
-while a plain ``address`` cannot be sent Ether.
+ایده پشت این تمایز این است که  ``address payable`` آدرسی است که می‌توانید اتر را به آن بفرستید، در حالی که نمی‌توان با یک  ``address`` ساده اتر ارسال کرد.
+
 
 Type conversions:
 
