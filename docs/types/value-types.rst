@@ -379,11 +379,11 @@ Send نقطه مقابل سطح پایین  ``transfer`` است. در صورت �
 
 .. _contract_types:
 
-Contract Types
+انواع قرارداد
 --------------
 
 
-انواع قرارداد
+
 هر :ref:`قراردادی<contracts>` نوع خاص خود را مشخص می‌کند. به طور ضمنی می‌توانید قراردادها را به قراردادهایی که از آنها به ارث می‌برند تبدیل کنید. قراردادها را می‌توان به طور صریح به نوع ``address``   تبدیل و از آنها تغییر داد.
 
 تبدیل صریح به نوع  ``address payable`` فقط از آنجا امکان پذیر است که نوع قرارداد تابع برگشتی قابل دریافت یا پرداخت داشته باشد. تبدیل هنوز با استفاده از  ``address(x)`` انجام می‌شود. اگر نوع قرارداد تابع برگشت پذیر یا قابل پرداخت نباشد، تبدیل به  ``address payable`` را می‌توان با استفاده از ``payable(address(x))`` انجام داد. در بخش مربوط به نوع :ref:`آدرس<address>` می‌توانید اطلاعات بیشتری کسب کنید.
@@ -418,125 +418,137 @@ Contract Types
 
 
 عملگرها:
-•	مقایسه ها: <=، <، ==، !=، >=، > (ارزیابی به  bool)
-•	عملگرهای بیت:  &، |، ^ (bitwise exclusive یا) ، ~  (bitwise negation)
-•	عملگرهای شیفت :  << (شیفت چپ) ،  >> (شیفت راست)
-
-*    مقایسه ها: ``=>`` ، ``>`` ، ``==`` ، ``=!`` ، ``=<`` ، ``<`` (ارزیابی به  ``bool``)
-*     عملگرهای بیت:  ``&`` ، ``|`` ، ``^`` (bitwise exclusive یا) ، ``~``  (bitwise negation)
-*     عملگرهای شیفت :  ``>>`` (شیفت چپ) ،  ``<<`` (شیفت راست)
-*     دسترسی به Index: اگر  ``x`` از نوع  ``bytesI`` باشد، سپس ``x[k]`` برای  ``0 <= k < I``   بایت  ``k`` را برمی‌گردانم (فقط برای خواندن).
-* Shift operators: ``<<`` (left shift), ``>>`` (right shift)
-* Index access: If ``x`` is of type ``bytesI``, then ``x[k]`` for ``0 =< k < I`` returns the ``k`` th byte (read-only).
-
-Operators:
 
 * Comparisons: ``<=``, ``<``, ``==``, ``!=``, ``>=``, ``>`` (evaluate to ``bool``)
 * Bit operators: ``&``, ``|``, ``^`` (bitwise exclusive or), ``~`` (bitwise negation)
 * Shift operators: ``<<`` (left shift), ``>>`` (right shift)
 * Index access: If ``x`` is of type ``bytesI``, then ``x[k]`` for ``0 <= k < I`` returns the ``k`` th byte (read-only).
 
-The shifting operator works with unsigned integer type as right operand (but
-returns the type of the left operand), which denotes the number of bits to shift by.
-Shifting by a signed type will produce a compilation error.
 
-Members:
+عملگر شیفت با نوع عدد صحیح بدون علامت به عنوان عملوند راست کار می‌کند (اما نوع عملوند سمت چپ را برمی‌گرداند)، که تعداد بیت های شیفت را نشان می‌دهد. جابجایی با نوع با علامت ، خطای کامپایل ایجاد می‌کند.
 
-* ``.length`` yields the fixed length of the byte array (read-only).
 
-.. note::
-    The type ``bytes1[]`` is an array of bytes, but due to padding rules, it wastes
-    31 bytes of space for each element (except in storage). It is better to use the ``bytes``
-    type instead.
+اعضا (Members):
+
+* ``length.``  طول ثابت آرایه بایت را ارائه می‌دهد (فقط برای خواندن).
 
 .. note::
-    Prior to version 0.8.0, ``byte`` used to be an alias for ``bytes1``.
+    
+    نوع  ``bytes1[]`` ، آرایه‌ای از بایت است. اما به دلیل قوانین لایه گذاری، 31 بایت فضا را برای هر عنصر هدر می‌دهد (به جز در storage). بهتر است به جای آن از نوع  ``bytes`` استفاده کنید.
 
-Dynamically-sized byte array
+.. note::
+
+    قبل از ورژن 0.8.0 ،  ``byte`` یک نام مستعار برای ``bytes1`` بود.
+
+
+
+آرایه بایت با اندازه پویا 
 ----------------------------
 
 ``bytes``:
-    Dynamically-sized byte array, see :ref:`arrays`. Not a value-type!
+
+    آرایه بایت در اندازه پویا، از نوع مقدار  نیست. به قسمت  :ref:`آرایه‌ها<arrays>` مراجعه کنید !
+
+   
 ``string``:
-    Dynamically-sized UTF-8-encoded string, see :ref:`arrays`. Not a value-type!
+
+    رشته‌ای با کد UTF-8 به صورت پویا، به قسمت  :ref:`آرایه‌ها<arrays>` کنید. از نوع مقدار نیست!
 
 .. index:: address, literal;address
 
 .. _address_literals:
 
-Address Literals
+لیترال‌های Address
 ----------------
 
-Hexadecimal literals that pass the address checksum test, for example
-``0xdCad3a6d3569DF655070DEd06cb7A1b2Ccd1D3AF`` are of ``address`` type.
-Hexadecimal literals that are between 39 and 41 digits
-long and do not pass the checksum test produce
-an error. You can prepend (for integer types) or append (for bytesNN types) zeros to remove the error.
+لیترال‌های هگزادسیمال که از تست checksum آدرس استفاده می‌کنند، به عنوان مثال 
+``0xdCad3a6d3569DF655070DEd06cb7A1b2Ccd1D3AF``  از نوع  ``address`` هستند. 
+لیترال‌های هگزادسیمال که دارای طول 39 تا 41 رقم هستند و از  تست checksum عبور نمی‌کنند، خطایی 
+ایجاد می‌کنند. برای حذف خطا می‌توانید (برای انواع عدد صحیح) یا (برای انواع bytesNN) صفرها را ضمیمه 
+کنید.
+
+
 
 .. note::
-    The mixed-case address checksum format is defined in `EIP-55 <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md>`_.
+    
+    قالب  checksum آدرس مختلط در `EIP-55 <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md>`_ تعریف شده است.
 
 .. index:: literal, literal;rational
 
 .. _rational_literals:
 
-Rational and Integer Literals
+لیترال‌های عدد گویا و صحیح
 -----------------------------
 
-Integer literals are formed from a sequence of numbers in the range 0-9.
-They are interpreted as decimals. For example, ``69`` means sixty nine.
-Octal literals do not exist in Solidity and leading zeros are invalid.
+لیترال‌های عدد صحیح  از توالی اعداد در محدوده 0-9 تشکیل می شوند. آنها به عنوان دیسیمال تفسیر می 
+شوند. به عنوان مثال  ``69`` به معنای شصت و نه است. لیترال‌های Octal در سالیدیتی وجود ندارند و صفرهای 
+قبل از عدد نامعتبر هستند.
 
-Decimal fraction literals are formed by a ``.`` with at least one number on
-one side.  Examples include ``1.``, ``.1`` and ``1.3``.
 
-Scientific notation is also supported, where the base can have fractions and the exponent cannot.
-Examples include ``2e10``, ``-2e10``, ``2e-10``, ``2.5e1``.
+لیترال‌های کسری دیسیمال توسط یک  ``.`` با حداقل یک عدد در یک طرف تشکیل می‌شوند. مثال‌ها 
+شامل ``.1`` ،  ``1.`` و  ``1.3`` است.
 
-Underscores can be used to separate the digits of a numeric literal to aid readability.
-For example, decimal ``123_000``, hexadecimal ``0x2eff_abde``, scientific decimal notation ``1_2e345_678`` are all valid.
-Underscores are only allowed between two digits and only one consecutive underscore is allowed.
-There is no additional semantic meaning added to a number literal containing underscores,
-the underscores are ignored.
 
-Number literal expressions retain arbitrary precision until they are converted to a non-literal type (i.e. by
-using them together with a non-literal expression or by explicit conversion).
-This means that computations do not overflow and divisions do not truncate
-in number literal expressions.
 
-For example, ``(2**800 + 1) - 2**800`` results in the constant ``1`` (of type ``uint8``)
-although intermediate results would not even fit the machine word size. Furthermore, ``.5 * 8`` results
-in the integer ``4`` (although non-integers were used in between).
+نشانه علمی نیز پشتیبانی می‌شود، جایی که پایه می‌تواند کسر داشته باشد و توان ‌تواند. برای مثال از 
+جمله  ``2e10`` ،  ``-2e10`` ،  ``2e-10`` ،  ``2.5e1`` .
 
-Any operator that can be applied to integers can also be applied to number literal expressions as
-long as the operands are integers. If any of the two is fractional, bit operations are disallowed
-and exponentiation is disallowed if the exponent is fractional (because that might result in
-a non-rational number).
+// @saracodic's comment:   ``(2**800 + 1) - 2**800`` swapping in the above text
 
-Shifts and exponentiation with literal numbers as left (or base) operand and integer types
-as the right (exponent) operand are always performed
-in the ``uint256`` (for non-negative literals) or ``int256`` (for a negative literals) type,
-regardless of the type of the right (exponent) operand.
+زیرخط‌ می‌تواند برای جدا کردن رقم از لیترال‌های عددی برای کمک به خوانایی استفاده شود. به عنوان مثال، 
+دسیمال ``000_123`` ، هگزادسیمال  ``0x2eff_abde`` ، نماد علمی دسیمال  ``1_2e34_678`` همه 
+معتبر هستند. زیرخط‌ تنها بین دو رقم مجاز است و تنها یک زیرخط متوالی مجاز است. هیچ معنایی سمنتیک 
+اضافی به لیترال‌ عددی  حاوی زیرخط اضافه نشده است. 
+
+// @saracodic's comment:   ``(2**800 + 1) - 2**800`` swapping in the above text
+
+عبارات لیترال‌های عددی  دقت دلخواه را حفظ می‌کنند تا زمانی که به یک نوع غیرلیترالی تبدیل شوند (به عنوان 
+مثال استفاده از آنها همراه با یکدیگر با یک عبارت غیرلیترالی یا با تبدیل صریح). این بدان معناست که محاسبات 
+سرریز نمی‌شود و تقسیمات در عبارات لیترال عددی کوتاه نمی‌شوند.
+
+
+به عنوان مثال،  ``(2**800 + 1) - 2**800`` منجر به ثابت   ``1``  (از نوع  ``uint8`` ) می‌شود گرچند 
+نتایج میانی حتی اندازه کلمه ماشین را فیت نمی‌کند. علاوه بر این،   ``8 * 5.`` منجر به عدد صحیح  4 (گرچند 
+در بین آنها غیر عدد صحیح استفاده می‌شود).
+
+ // @saracodic's comment:   ``(2**800 + 1) - 2**800`` swapping in the above text
+
+هر عملگری که می‌تواند به عدد صحیح اعمال شود، تا زمانی که عملوند‌ها عدد صحیح باشند می تواند به لیترال‌های 
+عددی نیز اعمال شود. اگر هر یکی از این دو کسری باشند، عملیات بیت امکان پذیر نیست و نیز به توان رساندن 
+اگر توان کسری باشد (زیرا ممکن است منجر به یک عدد غیر گویا شوند) امکان پذیر نیست.
+
+
+
+تعویض و به توان رساندن با اعداد لیترال  بطوریکه سمت چپ (یا پایه) عملوند و نوع عدد صحیح در سمت راست 
+به عنوان عملوند  (توان) همیشه در   ``uint256`` (برای لیترال‌های غیر منفی) یا  ``int256`` (برای لیترال‌های 
+منفی)، بدون توجه به نوع سمت راست عملوند (توان)، عمل می‌کند.
+
+
 
 .. warning::
-    Division on integer literals used to truncate in Solidity prior to version 0.4.0, but it now converts into a rational number, i.e. ``5 / 2`` is not equal to ``2``, but to ``2.5``.
+
+    تقسیم بر روی لیترال‌های عدد صحیح برای کوتاه کردن در سالیدیتی نسخه‌های قبلتر از نسخه 0.4.0 استفاده 
+    میشد، اما اکنون به یک عدد گویا تبدیل می شود، برای مثال  ``2 / 5``  برابر با ``2`` نیست بلکه برابر با ``2.5`` می‌باشد.
+  
+.. note::
+
+    سالیدیتی برای هر عدد گویا یک نوع لیترال عددی دارد. لیترال های عدد صحیح و لیترال‌های عدد گویا به انواع 
+    لیترال‌های عدد تعلق دارند. علاوه بر این، تمام عبارات لیترال‌های عددی (یعنی عباراتی که فقط شامل 
+    لیترال‌های عددی و عملگرها هستند) به انواع لیترال‌های عددی تعلق دارند. بنابراین عبارات لیترال عددی  
+    ``1+2``  و ``2+1`` هر دو متعلق به همان نوع لیترال عددی برای عدد گویا سه هستند.
+
+ // @saracodic's comment:   ``2+1`` swapping in the above text
+
 
 .. note::
-    Solidity has a number literal type for each rational number.
-    Integer literals and rational number literals belong to number literal types.
-    Moreover, all number literal expressions (i.e. the expressions that
-    contain only number literals and operators) belong to number literal
-    types.  So the number literal expressions ``1 + 2`` and ``2 + 1`` both
-    belong to the same number literal type for the rational number three.
 
 
-.. note::
-    Number literal expressions are converted into a non-literal type as soon as they are used with non-literal
-    expressions. Disregarding types, the value of the expression assigned to ``b``
-    below evaluates to an integer. Because ``a`` is of type ``uint128``, the
-    expression ``2.5 + a`` has to have a proper type, though. Since there is no common type
-    for the type of ``2.5`` and ``uint128``, the Solidity compiler does not accept
-    this code.
+    عبارات لیترال عددی به محض استفاده با عبارات غیر لیترال به نوع غیر لیترال تبدیل می‌شوند. با نادیده گرفتن 
+    انواع، مقدار عبارتی که به  ``b`` در زیر اختصاص داده شده به عنوان عدد صحیح ارزیابی می‌شود. از آنجا که  ``a`` از 
+    نوع ``uint128`` است، عبارت ``2.5 +a`` باید نوع مناسبی داشته باشد. از آنجا که نوع متداولی برای 
+    نوع  ``2.5`` و  ``uint128`` وجود ندارد، کامپایلر سالیدیتی این کد را قبول نمی‌کند.
+
+// @saracodic's comment:  2.5+a swapping in the above text
 
 .. code-block:: solidity
 
@@ -546,16 +558,23 @@ regardless of the type of the right (exponent) operand.
 .. index:: literal, literal;string, string
 .. _string_literals:
 
-String Literals and Types
+لیترال‌های string و انواع
 -------------------------
 
-String literals are written with either double or single-quotes (``"foo"`` or ``'bar'``), and they can also be split into multiple consecutive parts (``"foo" "bar"`` is equivalent to ``"foobar"``) which can be helpful when dealing with long strings.  They do not imply trailing zeroes as in C; ``"foo"`` represents three bytes, not four.  As with integer literals, their type can vary, but they are implicitly convertible to ``bytes1``, ..., ``bytes32``, if they fit, to ``bytes`` and to ``string``.
+ لیترال‌های رشته‌ای با دو نقل قول يا تك نقل قولي نوشته مي‌شوند ( ``"foo"``  يا  ``'bar'`` )، و همچنين 
+ مي‌توانند به چند قسمت متوالي تقسيم شوند ( ``"foo" "bar"``  معادل ``"foobar"`` است) که می‌تواند 
+ هنگام کار با رشته‌های طولانی مفید باشد. آنها به مفهوم صفر انتهایی در C نیست.  ``"foo"`` نشانگر سه بایت 
+ می‌باشد، نه چهار بایت.
+ همانند لیترال‌های عدد صحیح، نوع آنها نیز می‌تواند متفاوت باشد، اما در صورت متناسب بودن آنها به بایت‌های 
+ ``bytes1, …, bytes32`` تبدیل می‌شوند، اگر متناسب باشند، به ``bytes`` و  ``string`` تبدیل می‌شوند.
 
-For example, with ``bytes32 samevar = "stringliteral"`` the string literal is interpreted in its raw byte form when assigned to a ``bytes32`` type.
+به عنوان مثال، با  b``bytes32 samevar = "stringliteral"``  لیترال  رشته‌ای وقتی به نوع ``bytes32`` اختصاص یابد به معنای بایت خام  تفسیر می‌شود.
 
-String literals can only contain printable ASCII characters, which means the characters between and including 0x1F .. 0x7E.
 
-Additionally, string literals also support the following escape characters:
+  لیترال‌های رشته‌ای  فقط می‌توانند حاوی کارکترهای ASCII قابل چاپ باشند، این به معنای کارکترهای شامل و بین 0x1F .. 0x7E می‌باشند.
+
+علاوه بر این، لیترال‌های رشته‌ای  از کارکتر‌های escape زیر نیز پشتیبانی می‌کنند:
+
 
 - ``\<newline>`` (escapes an actual newline)
 - ``\\`` (backslash)
@@ -567,19 +586,23 @@ Additionally, string literals also support the following escape characters:
 - ``\xNN`` (hex escape, see below)
 - ``\uNNNN`` (unicode escape, see below)
 
-``\xNN`` takes a hex value and inserts the appropriate byte, while ``\uNNNN`` takes a Unicode codepoint and inserts an UTF-8 sequence.
+``xNN\`` یک مقدار hex می‌گیرد و بایت مناسب را وارد می‌کند، در حالی که  ``uNNNN\`` یک کد رمز Unicode را می‌گیرد و یک توالی UTF-8 را وارد می‌کند.
+
 
 .. note::
+
 
     Until version 0.8.0 there were three additional escape sequences: ``\b``, ``\f`` and ``\v``.
     They are commonly available in other languages but rarely needed in practice.
     If you do need them, they can still be inserted via hexadecimal escapes, i.e. ``\x08``, ``\x0c``
     and ``\x0b``, respectively, just as any other ASCII character.
 
-The string in the following example has a length of ten bytes.
-It starts with a newline byte, followed by a double quote, a single
-quote a backslash character and then (without separator) the
-character sequence ``abcdef``.
+
+
+
+رشته در مثال زیر دارای طول ده بایت است. این کار با یک بایت خط جدید و به دنبال آن یک دو نقل قول، یک  تک نقل قول یک کاراکتر بک اسلش و سپس (بدون جدا کننده) توالی کاراکتر ``abcdef`` شروع می‌شود.
+
+
 
 .. code-block:: solidity
     :force:
@@ -587,14 +610,16 @@ character sequence ``abcdef``.
     "\n\"\'\\abc\
     def"
 
-Any Unicode line terminator which is not a newline (i.e. LF, VF, FF, CR, NEL, LS, PS) is considered to
-terminate the string literal. Newline only terminates the string literal if it is not preceded by a ``\``.
+هر خاتمه دهنده خط Unicode که یک خط جدید نباشد (به عنوان مثال LF ، VF ، FF ، CR ، NEL ، LS ، 
+PS) برای خاتمه لیترال رشته در نظر گرفته می‌شود. Newline فقط در صورتی لیترال رشته را خاتمه می‌دهد 
+که قبل از آن  ``\`` وجود نداشته باشد.
 
-Unicode Literals
+لیترال‌های Unicode
 ----------------
+در حالی که لیترال‌های رشته‌ای منظم فقط می‌توانند حاوی ASCII باشند، لیترال‌های unicode - با پیشوند 
+کلمه کلیدی – ``unicode`` می‌توانند حاوی هر توالی معتبر UTF-8  باشند. آنها همچنین از همان توالی‌های 
+escape به عنوان لیترال‌های رشته منظم پشتیبانی می‌کنند.
 
-While regular string literals can only contain ASCII, Unicode literals – prefixed with the keyword ``unicode`` – can contain any valid UTF-8 sequence.
-They also support the very same escape sequences as regular string literals.
 
 .. code-block:: solidity
 
@@ -602,19 +627,19 @@ They also support the very same escape sequences as regular string literals.
 
 .. index:: literal, bytes
 
-Hexadecimal Literals
+لیترال‌های هگزادسیمال
 --------------------
+لیترال‌های هگزادسیمال با پیشوند کلمه کلیدی  ``hex`` هستند،که با دو نقل قول يا تك نقل قولي محصور شده‌اند 
+( ``hex"001122FF"``، ``hex'0011_22_FF'`` ). محتوای آنها باید ارقام هگزادسیمال باشد که به 
+صورت اختیاری می‌تواند از یک زیر خط به عنوان جدا کننده بین مرز بایت استفاده کند. مقدار لیترال، نمایش 
+دودویی توالی هگزادسیمال خواهد بود.
 
-Hexadecimal literals are prefixed with the keyword ``hex`` and are enclosed in double
-or single-quotes (``hex"001122FF"``, ``hex'0011_22_FF'``). Their content must be
-hexadecimal digits which can optionally use a single underscore as separator between
-byte boundaries. The value of the literal will be the binary representation
-of the hexadecimal sequence.
 
-Multiple hexadecimal literals separated by whitespace are concatenated into a single literal:
-``hex"00112233" hex"44556677"`` is equivalent to ``hex"0011223344556677"``
+لیترال‌های مالتی هگزادسیمال جدا شده توسط فضای خالی به یک لیترال متصل 
+می‌شوند:  ``hex"00112233" hex"44556677"`` معادل با  ``hex"0011223344556677"`` است.
 
-Hexadecimal literals behave like :ref:`string literals <string_literals>` and have the same convertibility restrictions.
+
+لیترال‌های هگزادسیمال مانند :ref:`لیترال‌های رشته‌ای<string_literals>` رفتار می‌کنند و محدودیت‌های تبدیل پذیری یکسانی دارند.
 
 .. index:: enum
 
@@ -622,19 +647,18 @@ Hexadecimal literals behave like :ref:`string literals <string_literals>` and ha
 
 Enums
 -----
+Enums یکی از راه‌های ایجاد یک نوع تعریف شده توسط کاربر در سالیدیتی می‌باشد. آنها به طور صریح قابل 
+تبدیل به انواع مختلف عدد صحیح هستند اما تبدیل ضمنی مجاز نیست. تبدیل صریح از عدد صحیح در زمان 
+اجرا بررسی می‌کند که مقدار در محدوده enum باشد و در غیر این صورت باعث ایجاد خطای :ref:`Panic error<assert-and-require>` می‌شود. 
+Enums حداقل به یک عضو نیاز دارد و مقدار پیش فرض آن هنگام اعلام اولین عضو است. Enums نمی‌تواند بیش از 256 عضو داشته باشد.
 
-Enums are one way to create a user-defined type in Solidity. They are explicitly convertible
-to and from all integer types but implicit conversion is not allowed.  The explicit conversion
-from integer checks at runtime that the value lies inside the range of the enum and causes a
-:ref:`Panic error<assert-and-require>` otherwise.
-Enums require at least one member, and its default value when declared is the first member.
-Enums cannot have more than 256 members.
 
-The data representation is the same as for enums in C: The options are represented by
-subsequent unsigned integer values starting from ``0``.
+   نمایش داده‌ها همانند enum ها در C است: گزینه‌ها با مقادیر صحیح بدون علامت بعدی ارسال می‌شوند که از  ``0`` شروع می‌شوند.
 
-Using ``type(NameOfEnum).min`` and ``type(NameOfEnum).max`` you can get the
-smallest and respectively largest value of the given enum.
+
+با استفاده از ``type(NameOfEnum).min`` و ``type(NameOfEnum).max`` می‌توانید
+کوچکترین و به ترتیب بزرگترین مقدار عدد داده شده enum را دریافت کنید.
+
 
 
 .. code-block:: solidity
@@ -672,7 +696,8 @@ smallest and respectively largest value of the given enum.
     }
 
 .. note::
-    Enums can also be declared on the file level, outside of contract or library definitions.
+    Enums همچنین می‌تواند خارج از تعاریف قرارداد یا کتابخانه، در سطح فایل مشخص شوند.
+    
 
 .. index:: ! user defined value type, custom type
 
@@ -734,33 +759,34 @@ type with 18 decimals and a minimal library to do arithmetic operations on the t
         }
     }
 
-Notice how ``UFixed256x18.wrap`` and ``FixedMath.toUFixed256x18`` have the same signature but
-perform two very different operations: The ``UFixed256x18.wrap`` function returns a ``UFixed256x18``
-that has the same data representation as the input, whereas ``toUFixed256x18`` returns a
-``UFixed256x18`` that has the same numerical value.
+توجه داشته باشید که چگونه ``UFixed256x18.wrap`` و ``FixedMath.toUFixed256x18`` دارای امضای یکسان 
+هستند اما دو عملیات بسیار متفاوت را انجام می‌دهند: تابع ``UFixed256x18.wrap`` یک ``UFixed256x18`` را برمی‌گرداند 
+که نمایش داده مشابه با ورودی دارد، در حالی که ``toUFixed256x18`` یک ``UFixed256x18`` را برمی‌گرداند که مقدار 
+عددی یکسانی دارد.
+
 
 .. index:: ! function type, ! type; function
 
 .. _function_types:
 
-Function Types
+انواع توابع(Function Types)
 --------------
 
-Function types are the types of functions. Variables of function type
-can be assigned from functions and function parameters of function type
-can be used to pass functions to and return functions from function calls.
-Function types come in two flavours - *internal* and *external* functions:
+انواع توابع انواعی از توابع هستند. متغیرهای نوع تابع را می‌توان از توابع اختصاص داد و پارامترهای تابع نوع تابع 
+را می‌توان برای انتقال توابع به توابع برگشتی و از فراخوانی‌های تابع استفاده کرد. انواع توابع به دو صورت هستند– 
+توابع *داخلی* و *خارجی*:
 
-Internal functions can only be called inside the current contract (more specifically,
-inside the current code unit, which also includes internal library functions
-and inherited functions) because they cannot be executed outside of the
-context of the current contract. Calling an internal function is realized
-by jumping to its entry label, just like when calling a function of the current
-contract internally.
 
-External functions consist of an address and a function signature and they can
-be passed via and returned from external function calls.
+توابع داخلی را فقط می‌توان در داخل قرارداد فعلی فراخوانی کرد (به طور خاص، در داخل واحد کد فعلی، که 
+شامل توابع کتابخانه داخلی و توابع وراثتی نیز می‌شود) زیرا نمی‌توانند خارج از متن قرارداد فعلی اجرا شوند. 
+فراخوانی یک تابع داخلی با پرش به برچسب ورودی آن انجام می‌شود، دقیقاً مانند هنگام فراخوانی داخلی توابع 
+قرارداد فعلی.
 
+
+  توابع خارجی شامل یک آدرس و یک امضای تابع می‌باشند و می‌توان آنها را از طریق فراخوانی‌های تابع خارجی منتقل کرد و از آنها بازگرداند.
+
+
+  انواع توابع به شرح زیر ذکر شده‌است:
 Function types are notated as follows:
 
 .. code-block:: solidity
@@ -768,72 +794,79 @@ Function types are notated as follows:
 
     function (<parameter types>) {internal|external} [pure|view|payable] [returns (<return types>)]
 
-In contrast to the parameter types, the return types cannot be empty - if the
-function type should not return anything, the whole ``returns (<return types>)``
-part has to be omitted.
+در مقابل انواع پارامترها، انواع بازگشت نمی‌توانند خالی باشند - اگر نوع عملکرد نباید چیزی را برگرداند، کل 
+قسمت  ``returns (<return types>)``  باید حذف شود. به طور پیش فرض، انواع عملکردها داخلی 
+هستند، بنابراین می‌توان کلمه کلیدی داخلی را حذف کرد. توجه داشته باشید که این فقط در انواع توابع اعمال 
+می‌شود. قابلیت مشاهده به طور صریح برای توابع تعریف شده در قراردادها مشخص می‌شود، آنها پیش فرض ندارند.
 
-By default, function types are internal, so the ``internal`` keyword can be
-omitted. Note that this only applies to function types. Visibility has
-to be specified explicitly for functions defined in contracts, they
-do not have a default.
 
-Conversions:
 
-A function type ``A`` is implicitly convertible to a function type ``B`` if and only if
-their parameter types are identical, their return types are identical,
-their internal/external property is identical and the state mutability of ``A``
-is more restrictive than the state mutability of ``B``. In particular:
+به طور پیش فرض، انواع توابع داخلی هستند، بنابراین می‌توان کلمه کلیدی ``internal`` را حذف کرد. توجه 
+داشته باشید که این فقط در انواع توابع اعمال می‌شود. قابلیت مشاهده به طور صریح برای توابع تعریف شده در 
+قراردادها مشخص می‌شود، آنها پیش فرض ندارند.
 
-- ``pure`` functions can be converted to ``view`` and ``non-payable`` functions
-- ``view`` functions can be converted to ``non-payable`` functions
-- ``payable`` functions can be converted to ``non-payable`` functions
 
-No other conversions between function types are possible.
 
-The rule about ``payable`` and ``non-payable`` might be a little
-confusing, but in essence, if a function is ``payable``, this means that it
-also accepts a payment of zero Ether, so it also is ``non-payable``.
-On the other hand, a ``non-payable`` function will reject Ether sent to it,
-so ``non-payable`` functions cannot be converted to ``payable`` functions.
+تبدیل‌ها:
 
-If a function type variable is not initialised, calling it results
-in a :ref:`Panic error<assert-and-require>`. The same happens if you call a function after using ``delete``
-on it.
+یک تابع نوع  ``A`` به طور ضمنی قابل تبدیل به یک تابع نوع  ``B`` است اگر و فقط اگر انواع پارامترهای آنها یکسان 
+باشد، انواع بازگشت آنها یکسان، ویژگی internal/external آنها یکسان باشد و تغییرپذیری حالت  ``A`` محدود 
+کننده‌تر از تغییر پذیری حالت  ``B`` . به خصوص:
 
-If external function types are used outside of the context of Solidity,
-they are treated as the ``function`` type, which encodes the address
-followed by the function identifier together in a single ``bytes24`` type.
 
-Note that public functions of the current contract can be used both as an
-internal and as an external function. To use ``f`` as an internal function,
-just use ``f``, if you want to use its external form, use ``this.f``.
 
-A function of an internal type can be assigned to a variable of an internal function type regardless
-of where it is defined.
-This includes private, internal and public functions of both contracts and libraries as well as free
-functions.
-External function types, on the other hand, are only compatible with public and external contract
-functions.
-Libraries are excluded because they require a ``delegatecall`` and use :ref:`a different ABI
-convention for their selectors <library-selectors>`.
-Functions declared in interfaces do not have definitions so pointing at them does not make sense either.
+-	توابع ``pure`` را می‌توان به  ``view`` و توابع  ``non-payable`` تبدیل کرد
+-	توابع  ``view`` را می‌توان به توابع  ``non-payable`` پرداخت تبدیل کرد
+-	توابع  ``payable`` را می‌توان به توابع  ``non-payable`` پرداخت تبدیل کرد
 
-Members:
 
-External (or public) functions have the following members:
 
-* ``.address`` returns the address of the contract of the function.
-* ``.selector`` returns the :ref:`ABI function selector <abi_function_selector>`
+هیچ تبدیل دیگری بین انواع توابع امکان پذیر نیست.
+
+
+  قانون مربوط به  ``payable`` و   ``non-payable`` ممکن است کمی گیج کننده باشد، اما در اصل، اگر 
+  تابعی  ``payable`` باشد، این بدان معناست که پرداخت صفر اتر را نیز می‌پذیرد، بنابراین  ``non-payable`` نیز می‌باشد. از طرف دیگر، یک تابع  ``non-payable`` اتر ارسال شده به آن را رد می‌کند، 
+  بنابراین توابع  ``non-payable`` نمی‌توانند به توابع  ``payable`` تبدیل شوند.
+
+اگر یک متغیر از نوع تابع مقداردهی اولیه نشده باشد، فراخوانی آن منجر به خطای :ref:`Panic error<assert-and-require>` می‌شود. اگر پس از 
+استفاده از  ``delete`` تابع آن را فراخوانی کنید، همین اتفاق می‌افتد.
+
+
+اگر از انواع توابع external خارج از زمینه سالیدیتی استفاده شود، با آنها به عنوان نوع  ``function`` رفتار 
+می‌شود، که آدرس و به دنبال آن شناسه تابع را با هم در یک تک نوع  ``bytes24`` رمزگذاری می‌کند.
+
+
+
+توجه داشته باشید که توابع عمومی قرارداد جاری می‌توانند هم به عنوان تابع داخلی و هم به عنوان تابع خارجی 
+استفاده شود. برای استفاده از  ``f`` به عنوان یک تابع داخلی ، فقط از  ``f`` استفاده کنید، اگر می‌خواهید از فرم 
+خارجی آن استفاده کنید، از  ``this.f`` استفاده کنید.
+
+
+
+یک تابع از یک نوع داخلی را می‌توان به یک متغیر از یک نوع تابع داخلی بدون در نظر گرفتن مکان تعریف شده 
+اختصاص داد. این شامل توابع خصوصی، داخلی و عمومی قراردادها و کتابخانه‌ها و همچنین توابع رایگان است. از 
+طرف دیگر، انواع توابع خارجی فقط با توابع قرارداد عمومی و خارجی سازگار هستند. کتابخانه‌ها از این مستثنی 
+هستند چونکه به یک ``delegatecall`` نیاز دارند و :ref:`از یک کنوانسیون  مختلف ABI برای انتخابگرهای خود<library-selectors>` 
+استفاده می‌کنند. توابع اعلام شده در رابط‌ها تعریفی ندارند، بنابراین اشاره به آنها نیز معنی ندارد.
+
+اعضا:
+
+توابع خارجی (یا عمومی) اعضای زیر را دارند:
+
+*	``address.`` آدرس قرارداد تابع را برمی‌گرداند.
+*	``selector.``  :ref:`انتخابگر تابع ABI<abi_function_selector>` را برمی‌گرداند.
+
 
 .. note::
-  External (or public) functions used to have the additional members
-  ``.gas(uint)`` and ``.value(uint)``. These were deprecated in Solidity 0.6.2
-  and removed in Solidity 0.7.0. Instead use ``{gas: ...}`` and ``{value: ...}``
-  to specify the amount of gas or the amount of wei sent to a function,
-  respectively. See :ref:`External Function Calls <external-function-calls>` for
-  more information.
 
-Example that shows how to use the members:
+  توابع خارجی (یا عمومی) برای داشتن اعضای اضافی  ``gas(uint).`` و  ``value(uint).`` استفاده 
+  می‌شود. اینها در سالیدیتی نسخه 0.6.2 منسوخ شده و در سالیدیتی نسخه 0.7.0 حذف شدند. در عوض 
+  از  ``{...:gas }`` و  ``{...:value}``  برای تعیین مقدار گاز یا مقدار wei ارسال شده به یک 
+  تابع استفاده کنید. برای اطلاعات بیشتر به قسمت :ref:`فراخوانی تابع خارجی<external-function-calls>` مراجعه کنید.  
+  
+
+مثالی که نحوه استفاده از اعضا را نشان می‌دهد:
+
 
 .. code-block:: solidity
 
@@ -851,7 +884,8 @@ Example that shows how to use the members:
         }
     }
 
-Example that shows how to use internal function types:
+مثالی که نحوه استفاده از انواع توابع داخلی را نشان می‌دهد:
+
 
 .. code-block:: solidity
 
@@ -911,7 +945,7 @@ Example that shows how to use internal function types:
         }
     }
 
-Another example that uses external function types:
+مثال دیگری که از انواع توابع خارجی استفاده می‌کند:
 
 .. code-block:: solidity
 
@@ -958,4 +992,5 @@ Another example that uses external function types:
     }
 
 .. note::
-    Lambda or inline functions are planned but not yet supported.
+  
+      توابع Lambda یا inline برنامه ریزی شده‌اند اما هنوز پشتیبانی نمی‌شوند.
