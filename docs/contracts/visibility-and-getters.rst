@@ -49,11 +49,18 @@
     چین قابل مشاهده است.
 
 
+    هر چیزی که در قرارداد قرار دارد برای همه ناظران خارج از بلاک چین قابل مشاهده است.  ``private`` 
+    کردن چیزی فقط مانع از خواندن یا تغییر اطلاعات دیگر قراردادها می شود ، اما همچنان برای خارج از بلاک 
+    چین قابل مشاهده است.
+
+
 
 
 The visibility specifier is given after the type for
 state variables and between parameter list and
 return parameter list for functions.
+
+
 
 .. code-block:: solidity
 
@@ -70,6 +77,7 @@ return parameter list for functions.
 In the following example, ``D``, can call ``c.getData()`` to retrieve the value of
 ``data`` in state storage, but is not able to call ``f``. Contract ``E`` is derived from
 ``C`` and, thus, can call ``compute``.
+
 
 .. code-block:: solidity
 
@@ -106,8 +114,9 @@ In the following example, ``D``, can call ``c.getData()`` to retrieve the value 
 .. index:: ! getter;function, ! function;getter
 .. _getter-functions:
 
-Getter Functions
+توابع گیرنده (Getter Functions)
 ================
+
 
 The compiler automatically creates getter functions for
 all **public** state variables. For the contract given below, the compiler will
@@ -115,6 +124,8 @@ generate a function called ``data`` that does not take any
 arguments and returns a ``uint``, the value of the state
 variable ``data``. State variables can be initialized
 when they are declared.
+
+
 
 .. code-block:: solidity
 
@@ -137,6 +148,7 @@ symbol is accessed internally (i.e. without ``this.``),
 it evaluates to a state variable.  If it is accessed externally
 (i.e. with ``this.``), it evaluates to a function.
 
+
 .. code-block:: solidity
 
     // SPDX-License-Identifier: GPL-3.0
@@ -150,12 +162,13 @@ it evaluates to a state variable.  If it is accessed externally
         }
     }
 
-If you have a ``public`` state variable of array type, then you can only retrieve
-single elements of the array via the generated getter function. This mechanism
-exists to avoid high gas costs when returning an entire array. You can use
-arguments to specify which individual element to return, for example
-``myArray(0)``. If you want to return an entire array in one call, then you need
-to write a function, for example:
+
+اگر شما آرایه ای از متغیر های وضعیت از نوع ``public`` دارید، شما قادر خواهید بود که فقط یک
+عنصر از آرایه را توسط تابع گیرنده تولید شده بر گردانید. این مکانیزم(سازوکار) بوجود آمده تا
+از هزینه بالای گاز هنگام برگرداندن کل آرایه جلوگیری کند. شما می توانید با مشخص کردن
+ورودی  عنصر مورد نیاز خود از آرایه بازگردانید، برای مثال ``myArray(0)`` . اگر شما می خواهید کل
+آرایه را در یک فراخوانی بازگردانید نیاز مند نوشتن یک تابع هستید به عنوان مثال:
+
 
 .. code-block:: solidity
 
@@ -179,8 +192,11 @@ to write a function, for example:
         }
     }
 
-Now you can use ``getArray()`` to retrieve the entire array, instead of
-``myArray(i)``, which returns a single element per call.
+
+حالا شما می توانید از ``()getArray`` جهت گرفتن کل آرایه، بجای استفاده از ``myArray(i)`` که یک
+عنصر به ازای هر فراخوانی باز می گرداند ، استفاده کنید. 
+
+
 
 The next example is more complex:
 
@@ -201,9 +217,11 @@ The next example is more complex:
         mapping (uint => mapping(bool => Data[])) public data;
     }
 
-It generates a function of the following form. The mapping and arrays (with the
-exception of byte arrays) in the struct are omitted because there is no good way
-to select individual struct members or provide a key for the mapping:
+این تابعی به شکل زیر ایجاد می کند.
+نگاشت و آرایه‌ها (به استثنای آرایه‌های بایت) در struct حذف می‌شوند
+، زیرا هیچ راه مناسبی برای انتخاب اعضای struct به صورت جداگانه یا ارائه کلیدی برای نگاشت وجود ندارد:
+
+
 
 .. code-block:: solidity
 
